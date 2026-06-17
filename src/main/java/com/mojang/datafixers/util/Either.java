@@ -70,6 +70,11 @@ public abstract class Either<L, R> implements App<Either.Mu<R>, L> {
         }
 
         @Override
+        public void consume(Consumer<L> left, Consumer<R> right) {
+            left.accept(this.value);
+        }
+
+        @Override
         public L orElse(Function<R, L> function) {
             return this.value;
         }
@@ -146,6 +151,11 @@ public abstract class Either<L, R> implements App<Either.Mu<R>, L> {
         }
 
         @Override
+        public void consume(Consumer<L> left, Consumer<R> right) {
+            right.accept(this.value);
+        }
+
+        @Override
         public L orElse(Function<R, L> function) {
             return function.apply(this.value);
         }
@@ -191,6 +201,8 @@ public abstract class Either<L, R> implements App<Either.Mu<R>, L> {
     public abstract boolean isLeft();
 
     public abstract boolean isRight();
+
+    public abstract void consume(Consumer<L> left, Consumer<R> right);
 
     public abstract L orElse(Function<R, L> function);
 
