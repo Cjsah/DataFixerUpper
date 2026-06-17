@@ -60,6 +60,21 @@ public abstract class Either<L, R> implements App<Either.Mu<R>, L> {
         }
 
         @Override
+        public boolean isLeft() {
+            return true;
+        }
+
+        @Override
+        public boolean isRight() {
+            return false;
+        }
+
+        @Override
+        public L orElse(Function<R, L> function) {
+            return this.value;
+        }
+
+        @Override
         public String toString() {
             return "Left[" + value + "]";
         }
@@ -121,6 +136,21 @@ public abstract class Either<L, R> implements App<Either.Mu<R>, L> {
         }
 
         @Override
+        public boolean isLeft() {
+            return false;
+        }
+
+        @Override
+        public boolean isRight() {
+            return true;
+        }
+
+        @Override
+        public L orElse(Function<R, L> function) {
+            return function.apply(this.value);
+        }
+
+        @Override
         public String toString() {
             return "Right[" + value + "]";
         }
@@ -157,6 +187,12 @@ public abstract class Either<L, R> implements App<Either.Mu<R>, L> {
     public abstract Optional<L> left();
 
     public abstract Optional<R> right();
+
+    public abstract boolean isLeft();
+
+    public abstract boolean isRight();
+
+    public abstract L orElse(Function<R, L> function);
 
     public <T> Either<T, R> mapLeft(final Function<? super L, ? extends T> l) {
         return map(t -> left(l.apply(t)), Either::right);
